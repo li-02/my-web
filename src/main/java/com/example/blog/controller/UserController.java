@@ -27,7 +27,7 @@ import java.util.Map;
  * 认证控制器
  */
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 @Tag(name = "认证接口", description = "用户登录认证相关接口")
 public class UserController {
 

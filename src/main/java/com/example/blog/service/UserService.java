@@ -15,13 +15,5 @@ public interface UserService {
      */
     void updateLastLoginTime(String username);
 
-    /**
-     * 保存用户
-     */
-    User saveUser(User user);
 
-    /**
-     * 验证用户密码
-     */
-    boolean validatePassword(String username, String password);
 }

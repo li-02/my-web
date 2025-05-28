@@ -19,10 +19,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Lazy
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     @Override
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
@@ -38,21 +34,4 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    @Override
-    public User saveUser(User user) {
-        // 如果密码未加密，则进行加密
-        if (user.getPassword() != null && !user.getPassword().startsWith("$2a$")) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-        }
-        return userRepository.save(user);
-    }
-
-    @Override
-    public boolean validatePassword(String username, String password) {
-        Optional<User> userOpt = findByUsername(username);
-        if (userOpt.isPresent()) {
-            return passwordEncoder.matches(password, userOpt.get().getPassword());
-        }
-        return false;
-    }
 }

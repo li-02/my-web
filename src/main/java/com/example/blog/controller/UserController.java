@@ -48,6 +48,13 @@ public class UserController {
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
         try {
             // 认证用户
+            /*
+              背后调用
+              找用户 - 调用 CustomUserDetailsService
+              验证密码 - 用 BCryptPasswordEncoder 比较加密密码
+              处理异常 - 用户不存在、密码错误等
+              返回结果 - 成功就返回认证信息，失败就抛异常
+             */
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             loginRequest.getUsername(),

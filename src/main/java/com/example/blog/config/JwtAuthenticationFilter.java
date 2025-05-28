@@ -1,5 +1,6 @@
 package com.example.blog.config;
 
+import com.example.blog.service.UserService;
 import com.example.blog.utils.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -27,11 +28,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private JwtUtil jwtUtil;
 
     @Autowired
-    private ApplicationContext applicationContext;
-
-    private UserDetailsService getUserDetailsService() {
-        return applicationContext.getBean(UserDetailsService.class);
-    }
+    private UserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -50,7 +47,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // 验证token并设置认证信息
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = getUserDetailsService().loadUserByUsername(username);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
             if (jwtUtil.validateToken(token) && !jwtUtil.isTokenExpired(token)) {
                 UsernamePasswordAuthenticationToken authToken =

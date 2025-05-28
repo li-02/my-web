@@ -27,27 +27,27 @@ public interface MediaRepository extends JpaRepository<Media, Long> {
     /**
      * 根据媒体类型查询文件
      */
-    List<Media> findByMediaTypeOrderByUploadTimeDesc(String mediaType);
+    List<Media> findByMediaTypeOrderByCreateTimeDesc(String mediaType);
 
     /**
      * 分页查询媒体文件
      */
-    Page<Media> findAllByOrderByUploadTimeDesc(Pageable pageable);
+    Page<Media> findAllByOrderByCreateTimeDesc(Pageable pageable);
 
     /**
      * 根据原始文件名模糊查询
      */
-    List<Media> findByOriginalFilenameContainingOrderByUploadTimeDesc(String originalFilename);
+    List<Media> findByOriginalFilenameContainingOrderByCreateTimeDesc(String originalFilename);
 
     /**
      * 查询指定大小范围的文件
      */
-    List<Media> findByFileSizeBetweenOrderByUploadTimeDesc(Long minSize, Long maxSize);
+    List<Media> findByFileSizeBetweenOrderByCreateTimeDesc(Long minSize, Long maxSize);
 
     /**
      * 查询所有图片类型的媒体文件
      */
-    @Query("SELECT m FROM Media m WHERE m.mediaType LIKE 'image/%' ORDER BY m.uploadTime DESC")
+    @Query("SELECT m FROM Media m WHERE m.mediaType LIKE 'image/%' ORDER BY m.createTime DESC")
     List<Media> findAllImages();
 
     /**
@@ -59,7 +59,7 @@ public interface MediaRepository extends JpaRepository<Media, Long> {
     /**
      * 查询最新上传的文件
      */
-    List<Media> findTop10ByOrderByUploadTimeDesc();
+    List<Media> findTop10ByOrderByCreateTimeDesc();
 
     /**
      * 计算总存储大小
@@ -70,6 +70,6 @@ public interface MediaRepository extends JpaRepository<Media, Long> {
     /**
      * 根据文件名前缀查询
      */
-    @Query("SELECT m FROM Media m WHERE m.filename LIKE :prefix% ORDER BY m.uploadTime DESC")
+    @Query("SELECT m FROM Media m WHERE m.filename LIKE :prefix% ORDER BY m.createTime DESC")
     List<Media> findByFilenamePrefix(@Param("prefix") String prefix);
 }

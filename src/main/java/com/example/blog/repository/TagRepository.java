@@ -39,7 +39,7 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
     /**
      * 查询使用频率最高的标签
      */
-    @Query("SELECT t, COUNT(a) FROM Tag t JOIN t.articles a WHERE a.status = 'PUBLISHED' GROUP BY t ORDER BY COUNT(a) DESC")
+    @Query("SELECT t, COUNT(a) FROM Article a JOIN a.tags t WHERE a.status = 'PUBLISHED' GROUP BY t ORDER BY COUNT(a) DESC")
     List<Object[]> findPopularTags();
 
     /**

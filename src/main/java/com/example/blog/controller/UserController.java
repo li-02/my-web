@@ -1,7 +1,7 @@
 package com.example.blog.controller;
 
-import com.example.blog.dto.LoginRequest;
-import com.example.blog.dto.LoginResponse;
+import com.example.blog.dto.request.LoginRequest;
+import com.example.blog.dto.response.LoginResponse;
 import com.example.blog.entity.User;
 import com.example.blog.service.UserService;
 import com.example.blog.utils.JwtUtil;

@@ -1,4 +1,4 @@
-package com.example.blog.dto;
+package com.example.blog.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

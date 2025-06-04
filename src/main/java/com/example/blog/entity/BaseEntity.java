@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 @Getter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-@EnableJpaAuditing
 public abstract class BaseEntity {
     /**
      * EnableJpaAuditing 启用JPA审计功能，JPA自动管理实体的创建时间等元数据

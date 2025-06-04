@@ -10,9 +10,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @Entity
-@Table(name = "media", indexes = {
-        @Index(name = "idx_upload_time", columnList = "upload_time")
-})
+@Table(name = "media")
 public class Media extends BaseEntity {
 
     @Id

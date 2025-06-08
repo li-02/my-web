@@ -18,6 +18,9 @@ public class Tag extends BaseEntity {
     @Column(name = "name", nullable = false, unique = true, length = 50)
     private String name;
 
+    @Column(name = "usage_count", columnDefinition = "INT DEFAULT 0")
+    private Integer usageCount;
+
     // Constructors
     public Tag() {}
 

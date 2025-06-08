@@ -53,6 +53,9 @@ public class Article extends BaseEntity {
 
     @Column(name = "reading_time", columnDefinition = "INT DEFAULT 0")
     private Integer readingTime = 0;
+    
+    @Column(name = "word_count", columnDefinition = "INT DEFAULT 0")
+    private Integer wordCount = 0;
 
     @Column(name = "publish_time")
     private LocalDateTime publishTime;

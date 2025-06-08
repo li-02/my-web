@@ -22,8 +22,9 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     boolean existsByName(String name);
 
     /**
-     * 查询所有分类，按创建时间排序
+     * 查询所有未删除的分类，按创建时间排序
      */
+    @Query("SELECT c FROM Category c WHERE c.deleted = false ORDER BY c.createTime DESC")
     List<Category> findAllByOrderByCreateTimeDesc();
 
     /**

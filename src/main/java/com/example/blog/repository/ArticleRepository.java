@@ -21,7 +21,7 @@ public interface ArticleRepository extends JpaRepository<Article,Long> {
     /**
      * 根据状态查询文章
      */
-    List<Article> findByStatus(ArticleEnums.ArticleStatus status);
+    List<Article> findByStatus(ArticleEnums.ArticleStatus status, Pageable pageable);
 
     /**
      * 分页查询已发布的文章
@@ -90,4 +90,15 @@ public interface ArticleRepository extends JpaRepository<Article,Long> {
     @Query("SELECT DISTINCT a FROM Article a JOIN a.tags t WHERE t.name = :tagName AND a.status = :status ORDER BY a.createTime DESC")
     Page<Article> findByTagName(@Param("tagName") String tagName, @Param("status") ArticleEnums.ArticleStatus status, Pageable pageable);
 
+    Page<Article> findByCategoryId(Long categoryId, Pageable pageable);
+
+    Page<Article> findByTitleContaining(String keyword, Pageable pageable);
+
+    Page<Article> findByTitleContainingOrderByCreateTimeDesc(String title, Pageable pageable);
+
+    /**
+     * 根据分类ID查询文章
+     */
+    @Query("SELECT a FROM Article a WHERE a.category.id = :categoryId ORDER BY a.createTime DESC")
+    Page<Article> findByCategoryIdOrderByCreateTimeDesc(@Param("categoryId") Long categoryId, Pageable pageable);
 }

@@ -65,8 +65,9 @@ public class SecurityConfig {
                         .requestMatchers("/auth/login").permitAll() // 登录接口公开
                         .requestMatchers("/public/**").permitAll() // 前台接口公开
                         .requestMatchers("/swagger-ui/**", "/api-docs/**").permitAll() // Swagger UI和API文档公开
-                        // 管理员接口需要认证
-                        .requestMatchers("/admin/**").authenticated() // 管理员接口需要认证
+                        // TODO: 开发时可以放开下面的注释，生产环境请根据实际需求配置
+                        //.requestMatchers("/tag/**").authenticated()
+                        //.requestMatchers("/category/**").authenticated()
                         // 其他请求允许访问
                         .anyRequest().permitAll()
                 )

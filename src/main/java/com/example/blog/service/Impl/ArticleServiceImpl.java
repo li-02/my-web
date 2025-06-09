@@ -121,6 +121,10 @@ public class ArticleServiceImpl implements ArticleService {
                 article.getCategory() != null ? article.getCategory().getId() : null,
                 article.getCategory() != null ? article.getCategory().getName() : "未分类",
                 article.getViewCount(),
+                article.getWordCount(),
+                article.getReadingTime(),
+                article.getTags() != null ? article.getTags().stream().map(Tag::getName).toList() : new ArrayList<>(),
+                article.getCoverImage(),
                 article.getCreateTime(),
                 article.getUpdateTime()
         ));
@@ -143,6 +147,7 @@ public class ArticleServiceImpl implements ArticleService {
             response.setIsPinned(art.getIsPinned());
             response.setIsOriginal(art.getIsOriginal());
             response.setViewCount(art.getViewCount());
+            response.setTags(art.getTags().stream().map(Tag::getName).toList());
             response.setCreateTime(art.getCreateTime().toString());
             response.setUpdateTime(art.getUpdateTime().toString());
         } else {

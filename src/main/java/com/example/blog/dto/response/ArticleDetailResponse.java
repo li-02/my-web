@@ -2,6 +2,8 @@ package com.example.blog.dto.response;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class ArticleDetailResponse {
     private Long id;
@@ -15,6 +17,7 @@ public class ArticleDetailResponse {
     private Integer viewCount;
     private Integer readingTime;
     private Integer wordCount;
+    private List<String> tags;
     private String createTime;
     private String updateTime;
 }

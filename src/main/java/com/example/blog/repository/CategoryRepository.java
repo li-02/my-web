@@ -1,8 +1,12 @@
 package com.example.blog.repository;
 
+import com.example.blog.dto.response.CategoryWithCountResponse;
 import com.example.blog.entity.Category;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,10 +26,19 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     boolean existsByName(String name);
 
     /**
-     * 查询所有未删除的分类，按创建时间排序
+     * 查找所有未删除的分类，按创建时间降序排序
      */
-    @Query("SELECT c FROM Category c WHERE c.deleted = false ORDER BY c.createTime DESC")
-    List<Category> findAllByOrderByCreateTimeDesc();
+    List<Category> findByDeletedFalseOrderByCreateTimeDesc();
+
+    /**
+     * 查分页询所有未删除的分类，按创建时间排序
+     */
+    @Query("SELECT new com.example.blog.dto.response.CategoryWithCountResponse(c.id, c.name, c.description, c.createTime, c.updateTime, COUNT(a)) " +
+            "FROM Category c LEFT JOIN Article a ON c.id = a.category.id AND a.status = 'PUBLISHED' " +
+            "WHERE c.deleted = false AND (:keyword IS NULL OR c.name LIKE %:keyword%) " +
+            "GROUP BY c.id, c.name, c.description, c.createTime, c.updateTime " +
+            "ORDER BY c.createTime DESC")
+    Page<CategoryWithCountResponse> findCategoriesWithArticleCount(@Param("keyword") String keyword, Pageable pageable);
 
     /**
      * 根据名称模糊查询分类

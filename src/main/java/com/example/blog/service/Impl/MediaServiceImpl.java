@@ -1,7 +1,8 @@
-package com.example.blog.service;
+package com.example.blog.service.Impl;
 
 import com.example.blog.entity.Media;
 import com.example.blog.repository.MediaRepository;
+import com.example.blog.service.MediaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

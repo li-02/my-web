@@ -5,8 +5,10 @@ import com.example.blog.entity.Category;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -50,4 +52,12 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
      */
     @Query("SELECT c, COUNT(a) FROM Category c LEFT JOIN Article a ON c.id = a.category.id WHERE a.status = 'PUBLISHED' GROUP BY c ORDER BY COUNT(a) DESC")
     List<Object[]> findCategoriesWithArticleCount();
+
+    @Modifying
+    @Query("UPDATE Category c SET c.name = :name, c.description = :description WHERE c.id = :id")
+    int updateCategory(@Param("id") Long id, @Param("name") String name, @Param("description") String description);
+
+    @Modifying
+    @Query("UPDATE Category c SET c.deleted = true,c.deleteTime=now() WHERE c.id = :id")
+    int deleteCategories(@Param("id") Long id);
 }

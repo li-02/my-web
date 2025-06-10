@@ -3,6 +3,7 @@ package com.example.blog.controller;
 import com.example.blog.dto.request.CreateArticleRequest;
 import com.example.blog.dto.response.ArticleDetailResponse;
 import com.example.blog.dto.response.ArticleResponse;
+import com.example.blog.dto.response.PageResponse;
 import com.example.blog.entity.Article;
 import com.example.blog.response.ApiResponse;
 import com.example.blog.service.ArticleService;
@@ -15,7 +16,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/article")
@@ -37,8 +40,8 @@ public class ArticleController {
 
 
     @GetMapping("/articles")
-    @Operation(summary = "获取文章列表", description = "获取所有文章的列表")
-    public ApiResponse<Page<ArticleResponse>> getAllArticles(
+    @Operation(summary = "获取文章列表", description = "分页获取所有文章的列表")
+    public ApiResponse<PageResponse<ArticleResponse>> getAllArticles(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String keyword,
@@ -48,7 +51,7 @@ public class ArticleController {
         try {
             Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createTime"));
             Page<ArticleResponse> articlePage = articleService.getArticles(keyword, status, categoryId, pageable);
-            return ApiResponse.success(articlePage);
+            return ApiResponse.success(PageResponse.of(articlePage));
         } catch (IllegalArgumentException e) {
             return ApiResponse.error("参数错误: " + e.getMessage());
         } catch (Exception e) {

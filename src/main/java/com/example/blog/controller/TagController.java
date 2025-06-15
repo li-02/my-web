@@ -1,9 +1,15 @@
 package com.example.blog.controller;
 
+import com.example.blog.dto.response.PageResponse;
+import com.example.blog.dto.response.TagWithCountResponse;
 import com.example.blog.entity.Tag;
 import com.example.blog.response.ApiResponse;
 import com.example.blog.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,20 +28,24 @@ public class TagController {
     }
 
     @GetMapping("/tags")
-    public ApiResponse<List<Tag>> getAllTags() {
-        List<Tag> allTags = tagService.getAllTags();
-        return ApiResponse.success(allTags);
+    public ApiResponse<PageResponse<TagWithCountResponse>> getAllTags(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "keyword", required = false) String keyword
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createTime"));
+        Page<TagWithCountResponse> allTags = tagService.getAllTags(pageable, keyword);
+        return ApiResponse.success(PageResponse.of(allTags));
     }
 
-    /**
-     * 根据名称模糊查询标签
-     *
-     * @param keyword 标签名称
-     * @return 标签列表
-     */
+    @GetMapping("/all")
+    public ApiResponse<List<Tag>> getAll() {
+        List<Tag> tags = tagService.getAll();
+        return ApiResponse.success(tags);
+    }
     @GetMapping("/search")
     public ApiResponse<List<Tag>> searchTagByName(@RequestParam("keyword") String keyword) {
-        List<Tag> tags = tagService.getAllTags();
+        List<Tag> tags = tagService.getAll();
         List<Tag> result = new ArrayList<>();
         for (Tag tag : tags) {
             if (tag.getName().contains(keyword)) {
@@ -50,7 +60,14 @@ public class TagController {
     public ApiResponse<Tag> createTag(@RequestParam("name") String name) {
         Tag tag = new Tag();
         tag.setName(name);
+        tag.setUsageCount(0);
         Tag createdTag = tagService.createTag(tag);
         return ApiResponse.success(createdTag);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ApiResponse<Void> deleteTag(@PathVariable Long id) {
+        tagService.deleteTag(id);
+        return ApiResponse.success(null);
     }
 }

@@ -1,8 +1,11 @@
 package com.example.blog.repository;
 
+import com.example.blog.dto.response.TagWithCountResponse;
 import com.example.blog.entity.Tag;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.Pageable;
 
@@ -12,10 +15,18 @@ import java.util.Optional;
 @Repository
 public interface TagRepository extends JpaRepository<Tag, Long> {
 
+
+    List<Tag> findByDeletedFalseOrderByCreateTime();
     /**
      * 根据名称查询标签
      */
     Optional<Tag> findByName(String name);
+
+    @Query("SELECT new com.example.blog.dto.response.TagWithCountResponse(t.id, t.name, t.usageCount, t.createTime, t.updateTime) " +
+            "FROM Tag t " +
+            "WHERE t.deleted = false AND (:keyword IS NULL OR t.name LIKE %:keyword%) " +
+            "ORDER BY t.createTime DESC")
+    Page<TagWithCountResponse> findTagsWithArticleCount(Pageable pageable, @Param("keyword") String keyword);
 
     /**
      * 检查标签名称是否存在
